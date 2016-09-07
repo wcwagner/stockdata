@@ -14,7 +14,7 @@ _NEWS_KEYMAP = {
 }
 
 _QUOTES_KEYMAP = {
-    "t": "ticker",
+    "t": "symbol",
     "e": "exchange",
     "l": "lastPrice",
     "l_cur": "lastTradeWithCurrency",
@@ -33,6 +33,7 @@ _QUOTES_KEYMAP = {
 }
 
 _OPTONS_KEYMAP = {
+    "c": "change",
     "cp": "changePercentage",
     "vol": "volume",
     "e": "exchange",
