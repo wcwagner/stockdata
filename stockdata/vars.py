@@ -42,11 +42,13 @@ _OPTONS_KEYMAP = {
     "oi": "openInterest"
 }
 
-_NEWS_BASE_URL = "http://www.google.com/finance/company_news?output=json" \
+_GOOGLE_NEWS_BASE_URL = "http://www.google.com/finance/company_news?output=json" \
                "&q={0}&num={1}&start={2}"
 
-_QUOTES_BASE_URL = "http://finance.google.com/finance/" \
+_GOOGLE_QUOTES_BASE_URL = "http://finance.google.com/finance/" \
               "info?client=ig&q={0}%3A{1}"
 
-_OPTIONS_BASE_URL = "http://www.google.com/finance/option_chain?q={0}&" \
+_GOOGLE_OPTIONS_BASE_URL = "http://www.google.com/finance/option_chain?q={0}&" \
                     "output=json"
+
+_YAHOO_QUERY_BASE_URL = "https://query.yahooapis.com/v1/public/yql?"

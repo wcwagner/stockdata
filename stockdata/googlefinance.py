@@ -2,7 +2,7 @@ import demjson
 import requests
 import sys
 from .vars import (_NEWS_KEYMAP, _OPTONS_KEYMAP, _QUOTES_KEYMAP,
-                   _NEWS_BASE_URL, _OPTIONS_BASE_URL, _QUOTES_BASE_URL)
+                   _GOOGLE_NEWS_BASE_URL, _GOOGLE_OPTIONS_BASE_URL, _GOOGLE_QUOTES_BASE_URL)
 
 
 def _build_url(base_url, *args):
@@ -78,7 +78,7 @@ def get_news(symbol, num_articles=100, start=0):
     A array of JSON objects, where each JSON object contains a cluster of
     articles all relating to a similar subject.
     """
-    url = _build_url(_NEWS_BASE_URL, symbol, num_articles, start)
+    url = _build_url(_GOOGLE_NEWS_BASE_URL, symbol, num_articles, start)
     json_str = _get(url).text
     # need demjson's decode, json data is invalid for pythons native decoder
     news_json = demjson.decode(json_str)['clusters']
@@ -109,7 +109,7 @@ def get_quotes(symbols, exchange="NASDAQ"):
     #multiple symbols, convert to comma seperated list
     if not isinstance(symbols, str):
         symbols = ",".join(symbols)
-    url = _build_url(_QUOTES_BASE_URL, symbols, exchange)
+    url = _build_url(_GOOGLE_QUOTES_BASE_URL, symbols, exchange)
     json_str = _get(url).text
     quotes_json = demjson.decode(json_str[3:])
     _conv_quote_keys(quotes_json)
@@ -134,7 +134,7 @@ def get_options(symbol):
            ["ask", "bid", "change", "changePercentage", "volume", "exchange",
             "openInterest"]
     """
-    url = _build_url(_OPTIONS_BASE_URL, symbol)
+    url = _build_url(_GOOGLE_OPTIONS_BASE_URL, symbol)
     json_str = _get(url).text
     options_json = demjson.decode(json_str)
     _conv_options_keys(options_json)
