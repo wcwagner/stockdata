@@ -1,1 +1,1 @@
-from .googlestocks import *
+from .googlefinance import *
