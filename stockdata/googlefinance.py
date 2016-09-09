@@ -4,7 +4,6 @@ import sys
 from .vars import (_NEWS_KEYMAP, _OPTONS_KEYMAP, _QUOTES_KEYMAP,
                    _GOOGLE_NEWS_BASE_URL, _GOOGLE_OPTIONS_BASE_URL, _GOOGLE_QUOTES_BASE_URL)
 
-
 def _build_url(base_url, *args):
     """ formats a string based on the parameters passed in"""
     return base_url.format(*args)
@@ -139,3 +138,87 @@ def get_options(symbol):
     options_json = demjson.decode(json_str)
     _conv_options_keys(options_json)
     return options_json
+
+class Share():
+    def __init__(self, stock_symbol):
+        self.stock_symbol = stock_symbol
+        self.data = get_quotes(self.stock_symbol)[self.stock_symbol]
+
+    def __repr__(self):
+        return "Share({0})".format(self.stock_symbol)
+
+    def __str__(self):
+        ret = "Stock: {symbol}\nTrading At: {price}\nChange(%): " \
+              "{change}".format(symbol = self.symbol, price=self.price,
+                                change=self.change_percent)
+
+        return ret
+
+    def refresh(self):
+        self.data = get_quotes(self.stock_symbol)[self.stock_symbol]
+
+        
+    @property
+    def after_hours_trade_time(self):
+        return self.data['afterHoursLastTradeTime']
+
+    @property
+    def after_hours_last_price(self):
+        return self.data['afterHoursLastPrice']
+
+    @property
+    def after_hours_change(self):
+        return self.data['afterHoursChange']
+
+    @property
+    def change(self):
+        return self.data['change']
+
+    @property
+    def change_percent(self):
+        return self.data['changePercentage']
+
+    @property
+    def dividend(self):
+        return self.data['dividend']
+
+    @property
+    def dividend_yield(self):
+        return self.data['dividendYield']
+
+    @property
+    def exchange(self):
+        return self.data['exchange']
+
+    @property
+    def last_trade_datetime(self):
+        return self.data['lastTradeDateTime']
+
+    @property
+    def last_trade_with_currency(self):
+        return self.data['lastTradeWithCurrency']
+
+    @property
+    def last_trade_size(self):
+        return self.data['lastTradeSize']
+
+    @property
+    def symbol(self):
+        return self.data['symbol']
+
+
+    @property
+    def price(self):
+        return self.data['price']
+
+    @property
+    def volume(self):
+        return self.data['volume']
+
+
+
+
+
+
+
+
