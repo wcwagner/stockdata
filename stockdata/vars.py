@@ -3,7 +3,7 @@ Queries to Googles Finance REST API return JSON objects with abbreviated keys.
 In this file are the corresponding verbose keys, which are used to convert the
 keys to their more verbose form.
 """
-_NEWS_KEYMAP = {
+NEWS_KEYMAP = {
     "a": "clusteredArticles",
     "d": "dateTime",
     "s": "source",
@@ -13,10 +13,10 @@ _NEWS_KEYMAP = {
     "sp": "openingSentence"
 }
 
-_QUOTES_KEYMAP = {
+QUOTES_KEYMAP = {
     "t": "symbol",
     "e": "exchange",
-    "l": "lastPrice",
+    "l": "price",
     "l_cur": "lastTradeWithCurrency",
     "ltt": "lastTradeTime",
     "lt": "lastTradeTime",
@@ -32,7 +32,7 @@ _QUOTES_KEYMAP = {
     "yld": "dividendYield"
 }
 
-_OPTONS_KEYMAP = {
+OPTONS_KEYMAP = {
     "c": "change",
     "cp": "changePercentage",
     "vol": "volume",
@@ -42,13 +42,13 @@ _OPTONS_KEYMAP = {
     "oi": "openInterest"
 }
 
-_GOOGLE_NEWS_BASE_URL = "http://www.google.com/finance/company_news?output=json" \
+GOOGLE_NEWS_BASE_URL = "http://www.google.com/finance/company_news?output=json" \
                "&q={0}&num={1}&start={2}"
 
-_GOOGLE_QUOTES_BASE_URL = "http://finance.google.com/finance/" \
+GOOGLE_QUOTES_BASE_URL = "http://finance.google.com/finance/" \
               "info?client=ig&q={0}%3A{1}"
 
-_GOOGLE_OPTIONS_BASE_URL = "http://www.google.com/finance/option_chain?q={0}&" \
+GOOGLE_OPTIONS_BASE_URL = "http://www.google.com/finance/option_chain?q={0}&" \
                     "output=json"
 
 _YAHOO_QUERY_BASE_URL = "https://query.yahooapis.com/v1/public/yql?"

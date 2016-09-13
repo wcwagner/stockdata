@@ -1,8 +1,8 @@
 import demjson
 import requests
 import sys
-from .vars import (_NEWS_KEYMAP, _OPTONS_KEYMAP, _QUOTES_KEYMAP,
-                   _GOOGLE_NEWS_BASE_URL, _GOOGLE_OPTIONS_BASE_URL, _GOOGLE_QUOTES_BASE_URL)
+from .vars import (NEWS_KEYMAP, OPTONS_KEYMAP, QUOTES_KEYMAP,
+                   GOOGLE_NEWS_BASE_URL, GOOGLE_OPTIONS_BASE_URL, GOOGLE_QUOTES_BASE_URL)
 
 def _build_url(base_url, *args):
     """ formats a string based on the parameters passed in"""
@@ -24,10 +24,10 @@ def _conv_news_keys(json_objs):
     e.g. "s" --> "source"
     """
     for outer_json in json_objs:
-        _conv_keys_with_keymap(outer_json, _NEWS_KEYMAP)
+        _conv_keys_with_keymap(outer_json, NEWS_KEYMAP)
         if 'clusteredArticles' in outer_json:
             for article_json in outer_json['clusteredArticles']:
-                _conv_keys_with_keymap(article_json, _NEWS_KEYMAP)
+                _conv_keys_with_keymap(article_json, NEWS_KEYMAP)
 
 def _conv_quote_keys(quotes_json):
     """
@@ -35,14 +35,14 @@ def _conv_quote_keys(quotes_json):
     verbose form e.g. "t" --> "ticker"
     """
     for quote in quotes_json:
-        _conv_keys_with_keymap(quote, _QUOTES_KEYMAP)
+        _conv_keys_with_keymap(quote, QUOTES_KEYMAP)
 
 def _conv_options_keys(options_json):
 
     for type in ['puts', 'calls']:
         if type in options_json:
             for option in options_json[type]:
-                _conv_keys_with_keymap(option, _OPTONS_KEYMAP)
+                _conv_keys_with_keymap(option, OPTONS_KEYMAP)
 
 
 def _get(url):
@@ -55,7 +55,7 @@ def _get(url):
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(e)
-        sys.exit(1)
+
     return resp
 
 def get_news(symbol, num_articles=100, start=0):
@@ -77,7 +77,7 @@ def get_news(symbol, num_articles=100, start=0):
     A array of JSON objects, where each JSON object contains a cluster of
     articles all relating to a similar subject.
     """
-    url = _build_url(_GOOGLE_NEWS_BASE_URL, symbol, num_articles, start)
+    url = _build_url(GOOGLE_NEWS_BASE_URL, symbol, num_articles, start)
     json_str = _get(url).text
     # need demjson's decode, json data is invalid for pythons native decoder
     news_json = demjson.decode(json_str)['clusters']
@@ -108,7 +108,7 @@ def get_quotes(symbols, exchange="NASDAQ"):
     #multiple symbols, convert to comma seperated list
     if not isinstance(symbols, str):
         symbols = ",".join(symbols)
-    url = _build_url(_GOOGLE_QUOTES_BASE_URL, symbols, exchange)
+    url = _build_url(GOOGLE_QUOTES_BASE_URL, symbols, exchange)
     json_str = _get(url).text
     quotes_json = demjson.decode(json_str[3:])
     _conv_quote_keys(quotes_json)
@@ -133,9 +133,8 @@ def get_options(symbol):
            ["ask", "bid", "change", "changePercentage", "volume", "exchange",
             "openInterest"]
     """
-    url = _build_url(_GOOGLE_OPTIONS_BASE_URL, symbol)
-    json_str = _get(url).text
-    options_json = demjson.decode(json_str)
+    url = _build_url(GOOGLE_OPTIONS_BASE_URL, symbol)
+    options_json = demjson.decode(_get(url).text)
     _conv_options_keys(options_json)
     return options_json
 
@@ -157,7 +156,7 @@ class Share():
     def refresh(self):
         self.data = get_quotes(self.stock_symbol)[self.stock_symbol]
 
-        
+
     @property
     def after_hours_trade_time(self):
         return self.data['afterHoursLastTradeTime']
