@@ -160,7 +160,7 @@ class Share():
         last_price = float(self.price)
         pct_change = 0
         while True:
-            time.sleep(1)
+            time.sleep(60)
             self.refresh()
             pct_change = (last_price / float(self.price)) * 100.0
             if pct_change > threshold:
@@ -223,11 +223,3 @@ class Share():
     @property
     def volume(self):
         return self.data['volume']
-
-
-
-
-
-
-
-

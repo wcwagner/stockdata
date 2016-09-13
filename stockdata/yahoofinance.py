@@ -1,7 +1,7 @@
 import requests
 import json
 import time
-import warnings
+
 YAHOO_PUB_API_URL = "https://query.yahooapis.com/v1/public/yql?"
 YAHOO_ALL_ENV = "store://datatables.org/alltableswithkeys"
 
@@ -44,6 +44,18 @@ def get_quote(*symbols):
               "env": YAHOO_ALL_ENV}
     quote = json.loads(_request(YAHOO_PUB_API_URL, payload).text)
     return quote['query']['results']['quote']
+
+def get_currency(symbol):
+    if len(symbol) == 0:
+        raise ValueError("Must pass in at least one symbol")
+    else:
+        symbol = "('{0}')".format(symbol)
+    yql_query = _build_query(symbols=symbol, table="xchange", key="pair")
+    payload = {"q": yql_query,
+               "format": "json",
+               "env": YAHOO_ALL_ENV}
+    currency = json.loads(_request(YAHOO_PUB_API_URL, payload).text)
+    return currency['query']['results']
 
 class Quote():
 
@@ -109,7 +121,7 @@ class Quote():
         last_price = float(self.price)
         pct_change = 0
         while True:
-            time.sleep(1)
+            time.sleep(60)
             self.refresh()
             pct_change = (last_price / float(self.price)) * 100.0
             if pct_change > threshold:
@@ -119,5 +131,34 @@ class Quote():
 
 
 class Currency():
+
     def __init__(self, symbol):
-        super(Currency, self).__init__(symbol)
+        self.data = get_currency(symbol)
+
+    @property
+    def id(self):
+        return self.data['rate']['id']
+
+    @property
+    def name(self):
+        return self.data['rate']['Name']
+
+    @property
+    def rate(self):
+        return self.data['rate']['Rate']
+
+    @property
+    def date(self):
+        return self.data['rate']['Date']
+
+    @property
+    def time(self):
+        return self.data['rate']['Time']
+
+    @property
+    def ask(self):
+        return self.data['rate']['Ask']
+
+    @property
+    def bid(self):
+        return self.data['rate']['Bid']
