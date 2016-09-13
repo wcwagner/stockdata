@@ -1,6 +1,7 @@
 import requests
 import json
-import urllib.parse
+import time
+import warnings
 YAHOO_PUB_API_URL = "https://query.yahooapis.com/v1/public/yql?"
 YAHOO_ALL_ENV = "store://datatables.org/alltableswithkeys"
 
@@ -47,7 +48,6 @@ def get_quote(*symbols):
 class Quote():
 
     def __init__(self, symbol):
-        self.symbol = symbol
         self.data = get_quote(symbol)
 
     @property
@@ -71,7 +71,7 @@ class Quote():
         return self.data['DaysRange']
 
     @property
-    def last_trade_price(self):
+    def price(self):
         return self.data['LastTradePriceOnly']
 
     @property
@@ -102,8 +102,21 @@ class Quote():
     def year_low(self):
         return self.data['YearLow']
 
-    def update(self):
+    def refresh(self):
         self.data = get_quote(self.symbol)
+
+    def set_alert(self, threshold):
+        last_price = float(self.price)
+        pct_change = 0
+        while True:
+            time.sleep(1)
+            self.refresh()
+            pct_change = (last_price / float(self.price)) * 100.0
+            if pct_change > threshold:
+                print("{0}'s price has changed "
+                      "more than {1}%".format(self.symbol, threshold))
+
+
 
 class Currency():
     def __init__(self, symbol):

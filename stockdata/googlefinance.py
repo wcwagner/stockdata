@@ -1,6 +1,6 @@
 import demjson
 import requests
-import sys
+import time
 from .vars import (NEWS_KEYMAP, OPTONS_KEYMAP, QUOTES_KEYMAP,
                    GOOGLE_NEWS_BASE_URL, GOOGLE_OPTIONS_BASE_URL, GOOGLE_QUOTES_BASE_URL)
 
@@ -156,6 +156,16 @@ class Share():
     def refresh(self):
         self.data = get_quotes(self.stock_symbol)[self.stock_symbol]
 
+    def set_alert(self, threshold):
+        last_price = float(self.price)
+        pct_change = 0
+        while True:
+            time.sleep(1)
+            self.refresh()
+            pct_change = (last_price / float(self.price)) * 100.0
+            if pct_change > threshold:
+                print("{0}'s price has changed "
+                      "more than {1}%".format(self.symbol, threshold))
 
     @property
     def after_hours_trade_time(self):
